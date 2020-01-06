@@ -353,4 +353,4 @@ MigrationBackup/
 .ionide/
 
 # Ignore environment secrets
-*/Properties/launchSettings.json
+**/Properties/launchSettings.json
