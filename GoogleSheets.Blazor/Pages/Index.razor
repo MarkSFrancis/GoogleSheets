@@ -1,0 +1,36 @@
+﻿@page "/"
+
+@using GoogleSheets.Blazor.Data
+@inject GoogleSheetsService GoogleSheetsService
+
+<h1>Hello, world!</h1>
+
+@if (data is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <tbody>
+            @foreach (var row in data)
+            {
+                <tr>
+                    @foreach (var cell in row)
+                    {
+                        <td>@cell</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IList<IList<object>> data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await GoogleSheetsService.Query("A:B");
+    }
+}

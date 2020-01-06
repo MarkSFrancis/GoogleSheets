@@ -1,17 +1,16 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
+﻿using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
 using System;
-using System.Threading;
+using System.Collections.Generic;
 
 namespace GoogleSheets.HelloWorld
 {
-    class Program
+    internal class Program
     {
-        static readonly string[] _scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         public const string _appName = "GoogleSheets.HelloWorld";
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var apiKey = AppSettings.SheetsApiKey;
             var docId = AppSettings.SheetsDocId;
@@ -22,18 +21,19 @@ namespace GoogleSheets.HelloWorld
                 ApplicationName = _appName
             });
 
-            var request = service.Spreadsheets.Values.Get(docId, "A:B");
+            SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(docId, "A:B");
 
-            var spreadsheet = request.Execute();
+            ValueRange spreadsheet = request.Execute();
 
-            var sheetData = spreadsheet.Values;
-            foreach (var row in sheetData)
+            IList<IList<object>> sheetData = spreadsheet.Values;
+            foreach (IList<object> row in sheetData)
             {
                 foreach (var cell in row)
                 {
                     Console.WriteLine(cell);
                 }
             }
+
             Console.WriteLine();
             Console.ReadKey(true);
         }
